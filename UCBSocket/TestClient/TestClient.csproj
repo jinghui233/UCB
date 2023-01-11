@@ -7,4 +7,9 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\WPFUtils\WPFUtils.csproj" />
+    <ProjectReference Include="..\UCBSocket\UCBSocket.csproj" />
+  </ItemGroup>
+
 </Project>

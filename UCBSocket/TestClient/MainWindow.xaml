@@ -1,0 +1,36 @@
+﻿<Window x:Class="TestClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TestClient"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <DockPanel>
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                <Label Content="IP:" />
+                <TextBox x:Name="txtIP" Text="127.0.0.1" Width="100"/>
+                <Label Content="Port:" />
+                <TextBox x:Name="txtPort" Text="5000" Width="50"/>
+                <Button Content="Connect" Click="btnConnect_Click"/>
+            </StackPanel>
+            <Button DockPanel.Dock="Top" Content="Send"  Click="btnSend_Click"/>
+            <Grid DockPanel.Dock="Bottom">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="txtMsg" Grid.Column="0" TextWrapping="Wrap" ></TextBox>
+                <RichTextBox x:Name="richtxtLog" Grid.Column="1">
+                    <FlowDocument>
+                        <Paragraph>
+                            <Run Text=""/>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+            </Grid>
+        </DockPanel>
+
+    </Grid>
+</Window>

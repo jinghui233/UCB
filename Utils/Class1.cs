@@ -1,4 +1,4 @@
-﻿namespace ClassLibrary1
+﻿namespace Utils
 {
     public class Class1
     {
