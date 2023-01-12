@@ -1,6 +1,5 @@
 using System;
 using System.Drawing;
-using System.Security.Cryptography.Xml;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -9,18 +8,28 @@ namespace WPFUtils.Extension
 {
     public static class UICtlrAccess
     {
-        public static void AppendText(this DispatcherObject page, RichTextBox richTextBox, string txt)
+        public static void AppendText(this DispatcherObject page, RichTextBox richTextBox, string txt, bool scrollToEnd = true, bool limitBlocks = false, int maxBlocks = 100)
         {
             if (!page.Dispatcher.CheckAccess())
             {
                 page.Dispatcher.Invoke(new Action(() =>
                 {
                     richTextBox.AppendText(txt);
+                    while (limitBlocks&& richTextBox.Document.Blocks.Count > maxBlocks)
+                    {
+                        richTextBox.Document.Blocks.Remove(richTextBox.Document.Blocks.FirstBlock);
+                    }
+                    if (scrollToEnd) richTextBox.ScrollToEnd();
                 }));
             }
             else
             {
                 richTextBox.AppendText(txt);
+                while (limitBlocks && richTextBox.Document.Blocks.Count > maxBlocks)
+                {
+                    richTextBox.Document.Blocks.Remove(richTextBox.Document.Blocks.FirstBlock);
+                }
+                if (scrollToEnd) richTextBox.ScrollToEnd();
             }
         }
         public static string GetVal(this DispatcherObject page, TextBox textBox)

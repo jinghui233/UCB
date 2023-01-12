@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using UCBSocket;
 
 namespace UCBSocket
 {
@@ -17,10 +12,10 @@ namespace UCBSocket
         private bool isListen = true;
         private ReaderWriterLockSlim RWLock_ClientList;
         private List<SocketConnection> clientList;
-        public Action<SocketServer, SocketConnection> HandleNewClientConnected;
-        public Action<Exception> HandleException;
-        public Action<byte[], SocketConnection, SocketServer> HandleRecMsg;
-        public Action<SocketConnection, SocketServer> HandleClientClose;
+        public event Action<SocketServer, SocketConnection> ClientConnected;
+        public event Action<byte[], SocketEndPoint> ClientReceivedMessage;
+        public event Action<SocketEndPoint> ClientDisConnected;
+        public event Action<string> DebugMessage;
         public SocketServer(string ip, int port)
         {
             this.ip = ip;
@@ -28,6 +23,7 @@ namespace UCBSocket
             RWLock_ClientList = new ReaderWriterLockSlim();
             clientList = new List<SocketConnection>();
         }
+
         public bool StartServer(int backlog = 10)
         {
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);//实例化套接字（ip4寻址协议，流式传输，TCP协议）
@@ -49,15 +45,32 @@ namespace UCBSocket
             {
                 StartListen();
             }
-            SocketConnection socketConnection = new SocketConnection(newSocket, this)
-            {
-                RecMsgHandler = HandleRecMsg == null ? null : new Action<byte[], SocketConnection, SocketServer>(HandleRecMsg),
-                ClientCloseHandler = HandleClientClose == null ? null : new Action<SocketConnection, SocketServer>(HandleClientClose),
-                HandleException = HandleException == null ? null : new Action<Exception>(HandleException)
-            };
+            SocketConnection socketConnection = new SocketConnection(newSocket);
+            socketConnection.ReceivedMessage += OnClientReceivedMessage;
+            socketConnection.DisConnected += OnClientDisConnected;
+            socketConnection.DebugMessage += PrintDebugMessage;
+            socketConnection.UnexpectedDisconnection += OnUnexpectedDisconnection;
             socketConnection.StartRecMsg();
             AddConnection(socketConnection);
-            HandleNewClientConnected?.Invoke(this, socketConnection);
+            ClientConnected?.Invoke(this, socketConnection);
+            PrintDebugMessage($"{socketConnection.endPoint}已连接");
+        }
+        private void OnClientReceivedMessage(byte[] arg1, SocketEndPoint arg2)
+        {
+            ClientReceivedMessage?.Invoke(arg1, arg2);
+        }
+        private void OnClientDisConnected(SocketEndPoint obj)
+        {
+            PrintDebugMessage($"{obj.endPoint}断开连接");
+            ClientDisConnected?.Invoke(obj);
+        }
+        protected void PrintDebugMessage(string msg)
+        {
+            DebugMessage?.Invoke(msg);
+        }
+        private void OnUnexpectedDisconnection(SocketEndPoint obj)
+        {
+
         }
         public void AddConnection(SocketConnection theConnection)
         {
@@ -76,30 +89,31 @@ namespace UCBSocket
             RWLock_ClientList.EnterWriteLock();
             try
             {
-                theConnection.Close();
-                clientList.Remove(theConnection);
+                if (theConnection != null && clientList.Contains(theConnection))
+                    clientList.Remove(theConnection);
             }
             finally
             {
                 RWLock_ClientList.ExitWriteLock();
             }
         }
-        public int GetConnectionCount()
+        public void DisConnect(SocketConnection theConnection)
         {
-            RWLock_ClientList.EnterReadLock();
+            RWLock_ClientList.EnterWriteLock();
             try
             {
-                return clientList.Count;
+                theConnection.DisConnect();
             }
             finally
             {
-                RWLock_ClientList.ExitReadLock();
+                RWLock_ClientList.ExitWriteLock();
             }
         }
         public void Close()
         {
             foreach (var client in clientList)
             {
+                DisConnect(client);
                 RemoveConnection(client);
             }
         }

@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using MDManageUI;
+using System;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using UCBSocket;
+using UCBSocket.Extension;
+using Utils;
+using WPFUtils.Extension;
 
 namespace TestClient
 {
@@ -25,35 +18,46 @@ namespace TestClient
         public MainWindow()
         {
             InitializeComponent();
-            socketClient = new SocketClient(txtIP.Text, int.Parse(txtPort.Text));
-            socketClient.RecMsgHandler = OnRecMsg;
+            socketClient = new SocketClient(txtIP.Text, int.Parse(txtPort.Text),true);
+            socketClient.ReceivedMessage += OnRecMsg;
+            socketClient.DebugMessage += OnDebugMsg;
         }
-        private void OnRecMsg(byte[] arg1, SocketClient arg2)
+
+        private void OnDebugMsg(string obj)
         {
+            this.AppendText(rtxLog, obj + "\n");
+        }
+
+        private void OnRecMsg(byte[] arg1, SocketEndPoint arg2)
+        {
+            try
+            {
+                TransferredData transferredData = JsonHelper.JsonTo<TransferredData>(arg1);
+                this.AppendText(rtxLog, "转换成功");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
             string txt = Encoding.UTF8.GetString(arg1);
-            if (!Dispatcher.CheckAccess()) // CheckAccess returns true if you're on the dispatcher thread
-            {
-                Dispatcher.Invoke(new Action(() => { richtxtLog.AppendText($"Receive:{txt}\n"); }));
-            }
-            else
-            {
-                richtxtLog.AppendText($"Receive:{txt}\n");
-            }
+            this.AppendText(this.rtxLog, $"{arg2.endPoint}：{txt}\n");
         }
         private void btnConnect_Click(object sender, RoutedEventArgs e)
         {
-            if (socketClient.Connect())
-            {
-                richtxtLog.AppendText("connected\n");
-            }
+            socketClient.Connect();
         }
-
+        private void btnDisConnect_Click(object sender, RoutedEventArgs e)
+        {
+            socketClient.DisConnect();
+        }
         private void btnSend_Click(object sender, RoutedEventArgs e)
         {
-            if (socketClient.Send(txtMsg.Text))
-            {
-                //richtxtLog.AppendText($"send:{txtMsg.Text.Length}\n");
-            }
+            socketClient.Send(txtMsg.Text);
+        }
+
+        private void btnSendJson_Click(object sender, RoutedEventArgs e)
+        {
+            socketClient.SendAsJson(TestJsonData.GetRandomDatas(3));
         }
     }
 }

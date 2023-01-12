@@ -30,7 +30,7 @@ namespace BiliBiliLiveRoomWPFDemo
         {
             var liveHandler = new LiveHandler();
             liveHandler.richTextBox = richTextBox1;
-            var sroomid = 102;
+            var sroomid = 6092;
             var roomid = sroomid;
             //第一个参数是直播间的房间号
             //第二个参数是自己实现的处理器

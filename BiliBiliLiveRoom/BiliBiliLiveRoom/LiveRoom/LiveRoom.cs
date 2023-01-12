@@ -18,7 +18,7 @@ namespace BiliBiliLiveRoom.Live
     {
         //直播页面的房间ID
         private int _shotRoomId;
-
+        public int RoomID { get { return _shotRoomId; } }
         //真正的直播间ID
         private int _roomId;
         private readonly TcpClient _tcpClient = new TcpClient();
@@ -268,7 +268,6 @@ namespace BiliBiliLiveRoom.Live
             {
                 await ms.WriteAsync(data, 0, data.Length);
             }
-
             await _roomStream.WriteAsync(buffer, 0, buffer.Length);
         }
 

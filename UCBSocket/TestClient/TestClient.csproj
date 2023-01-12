@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\MovableDisco\MDManageUI\MDManageUI.csproj" />
     <ProjectReference Include="..\..\WPFUtils\WPFUtils.csproj" />
     <ProjectReference Include="..\UCBSocket\UCBSocket.csproj" />
   </ItemGroup>

@@ -1,0 +1,38 @@
+﻿<Window x:Class="MDManageUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MDManageUI"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <Label Content="RoomID:"/>
+            <TextBox x:Name="txtRoomID" Text="6092" Width="70"/>
+            <Button Content="OpenRoom" Click="btnOpenRoom_Click"/>
+            <Label Content="IP:"/>
+            <TextBox x:Name="txtIP" Text="127.0.0.1" Width="60"/>
+            <Label Content="Port:"/>
+            <TextBox x:Name="txtPort" Text="5000" Width="40"/>
+            <Button Content="OpenServer" IsEnabled="False"/>
+        </StackPanel>
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="500"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <RichTextBox x:Name="rtxDanmu" Grid.Column="0"></RichTextBox>
+            <DataGrid Grid.Column="1" Name="dataGrid1" ItemsSource="{Binding}" AutoGenerateColumns="False" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridComboBoxColumn></DataGridComboBoxColumn>
+                    <DataGridTextColumn Header="UID" Width="60" Binding="{Binding UID, Mode=OneWay}"/>
+                    <DataGridTextColumn Header="UName" Width="60" Binding="{Binding UName, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                    <DataGridTextColumn Header="LastOperationTime" Width="80" Binding="{Binding LastOperationTime, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <RichTextBox x:Name="rtxCommand" Grid.Column="2"></RichTextBox>
+        </Grid>
+    </DockPanel>
+</Window>

@@ -15,13 +15,24 @@
                 <TextBox x:Name="txtPort" Text="5000" Width="50"/>
                 <Button Content="Listen" Click="btnListen_Click"/>
             </StackPanel>
-            <RichTextBox x:Name="rtxLog" DockPanel.Dock="Bottom">
-                <FlowDocument>
-                    <Paragraph>
-                        <Run Text=""/>
-                    </Paragraph>
-                </FlowDocument>
-            </RichTextBox>
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                <Button DockPanel.Dock="Top" Content="Send"  Click="btnSend_Click"/>
+                <Button DockPanel.Dock="Top" Content="SendJson"  Click="btnSendJson_Click"/>
+            </StackPanel>
+            <Grid DockPanel.Dock="Bottom">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="txtMsg" Grid.Column="0" TextWrapping="Wrap" ></TextBox>
+                <RichTextBox x:Name="rtxLog" Grid.Column="1">
+                    <FlowDocument>
+                        <Paragraph>
+                            <Run Text=""/>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+            </Grid>
         </DockPanel>
     </Grid>
 </Window>
