@@ -1,4 +1,5 @@
 ﻿using BiliBiliLiveRoom.Live.Message;
+using MDManageUI.Command;
 using MDManageUI.Models;
 using System;
 using System.Collections.Generic;
@@ -45,7 +46,7 @@ namespace MDManageUI
             }
             player = new Player() { UID = (int)obj.UserId, UName = obj.Username, LastOperationTime = DateTime.Now };
             playerManager.Add(player);
-            SendJson(new TransferredData(new AudienceEnter() { UName = obj.Username }));
+            SendJson(DanmuInterpreter.AudienceEnter(obj.Username));
         }
         private void OnDanmuReceived(DanmuMessage obj)
         {
@@ -53,14 +54,20 @@ namespace MDManageUI
             if (player == null)
             {
                 player = new Player() { UID = (int)obj.UserId, UName = obj.Username, LastOperationTime = DateTime.Now };
+                SendJson(DanmuInterpreter.Interpret(obj.Content, obj.Username));
             }
+            //创建角色，转圈圈，向上下左右移动，换装
             player.LastOperationTime = DateTime.Now;
             playerManager.Add(player);
-            this.AppendText(rtxCommand, obj.Content, true, true, 100);
         }
         private void btnOpenRoom_Click(object sender, RoutedEventArgs e)
         {
             OpenRoom();
+        }
+
+        private void btnMenuSend_Click(object sender, RoutedEventArgs e)
+        {
+            liveHandler.DanmuMessageHandlerAsync(new DanmuMessage() { UserId = 0, Username = "", Content = txtMenuSend.Text });
         }
     }
 }

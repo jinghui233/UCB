@@ -23,7 +23,11 @@
                 <ColumnDefinition Width="500"></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <RichTextBox x:Name="rtxDanmu" Grid.Column="0"></RichTextBox>
+            <DockPanel Grid.Column="0">
+                <TextBox DockPanel.Dock="Top" x:Name="txtMenuSend"/>
+                <Button DockPanel.Dock="Top" Content="SendDanmu" Click="btnMenuSend_Click"/>
+                <RichTextBox x:Name="rtxDanmu" DockPanel.Dock="Bottom"></RichTextBox>
+            </DockPanel>
             <DataGrid Grid.Column="1" Name="dataGrid1" ItemsSource="{Binding}" AutoGenerateColumns="False" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridComboBoxColumn></DataGridComboBoxColumn>

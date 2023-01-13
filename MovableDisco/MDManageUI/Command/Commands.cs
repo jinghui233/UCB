@@ -9,49 +9,44 @@ namespace MDManageUI
 {
     public class TransferredData
     {
-        public string FuncName { get; set; }
-        public BaseCommand FuncData { get; set; }
-        public TransferredData()
-        {
-
-        }
+        public string TypeName { get; set; }
+        public string CommandData { get; set; }
+        public TransferredData() { }
         public TransferredData(BaseCommand baseCommand)
         {
-            FuncName = baseCommand.GetType().Name;
-            FuncData = baseCommand;
+            TypeName = baseCommand.GetType().Name;
+            CommandData = baseCommand.ToJson();
+        }
+        public static TransferredData FromJson(byte[] jsonData)
+        {
+            return JsonHelper.JsonTo<TransferredData>(jsonData);
+        }
+        public static TransferredData FromJson(string jsonData)
+        {
+            return JsonHelper.JsonTo<TransferredData>(jsonData);
+        }
+        public T GetCommand<T>() where T : BaseCommand
+        {
+            return JsonHelper.JsonTo<T>(CommandData);
         }
     }
     public class BaseCommand
     {
-        public int aaa { get; set; }
+        public string UName { get; set; }
         public string ToJson()
         {
             return JsonHelper.ToJson(this);
         }
     }
-    public class MessageData : BaseCommand
+    public class NormAction : BaseCommand
     {
-        public string message { get; set; }
-    }
-    public class AudienceEnter : BaseCommand
-    {
-        public string UName { get; set; }
-    }
-
-    public class AddCharacter : BaseCommand
-    {
-        public string UName { get; set; }
-    }
-    public class RemoveCharacter : BaseCommand
-    {
-        public string UName { get; set; }
-    }
-    public class MoveCircle : BaseCommand
-    {
-        public string UName { get; set; }
+        public string ActionName { get; set; }
     }
     public class MoveSimple : BaseCommand
     {
-        public string UName { get; set; }
+        public bool Left { get; set; }
+        public bool Right { get; set; }
+        public bool Up { get; set; }
+        public bool Down { get; set; }
     }
 }

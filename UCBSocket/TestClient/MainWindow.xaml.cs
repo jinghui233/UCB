@@ -18,7 +18,7 @@ namespace TestClient
         public MainWindow()
         {
             InitializeComponent();
-            socketClient = new SocketClient(txtIP.Text, int.Parse(txtPort.Text),true);
+            socketClient = new SocketClient(txtIP.Text, int.Parse(txtPort.Text), true);
             socketClient.ReceivedMessage += OnRecMsg;
             socketClient.DebugMessage += OnDebugMsg;
         }
@@ -32,7 +32,17 @@ namespace TestClient
         {
             try
             {
-                TransferredData transferredData = JsonHelper.JsonTo<TransferredData>(arg1);
+                TransferredData transferredData = TransferredData.FromJson(arg1);
+                if (transferredData.TypeName == "NormAction")
+                {
+                    NormAction audienceEnter = transferredData.GetCommand<NormAction>();
+                    this.AppendText(rtxLog, audienceEnter.ActionName + "   success");
+                }
+                else if (transferredData.TypeName == "MoveSimple")
+                {
+                    MoveSimple moveSimple = transferredData.GetCommand<MoveSimple>();
+                    this.AppendText(rtxLog, moveSimple.Up + "   success");
+                }
                 this.AppendText(rtxLog, "转换成功");
             }
             catch (Exception)
