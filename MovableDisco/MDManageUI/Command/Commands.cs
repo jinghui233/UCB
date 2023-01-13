@@ -33,6 +33,7 @@ namespace MDManageUI
     public class BaseCommand
     {
         public string UName { get; set; }
+        public string OrigDanmu { get; set; }
         public string ToJson()
         {
             return JsonHelper.ToJson(this);

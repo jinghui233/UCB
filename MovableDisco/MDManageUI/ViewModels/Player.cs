@@ -12,7 +12,7 @@ namespace MDManageUI
 {
     public class Player : INotifyPropertyChanged
     {
-        public int UID { get; set; }
+        public long UID { get; set; }
         public string UName { get; set; }
         public DateTime LastOperationTime { get; set; }
 
@@ -29,15 +29,15 @@ namespace MDManageUI
     {
         public int MaxPlayerNumber = 100;
         public SortedList<DateTime, Player> PlayerList { get; set; }
-        public Dictionary<int, Player> PlayerDictionary { get; set; }
+        public Dictionary<long, Player> PlayerDictionary { get; set; }
         public ObservableCollection<Player> Players;
         public PlayerManager()
         {
             PlayerList = new SortedList<DateTime, Player>();
-            PlayerDictionary = new Dictionary<int, Player>();
+            PlayerDictionary = new Dictionary<long, Player>();
             Players = new ObservableCollection<Player>();
         }
-        public Player RemoveGet(int uid)
+        public Player RemoveGet(long uid)
         {
             if (PlayerDictionary.ContainsKey(uid))
             {

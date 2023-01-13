@@ -40,25 +40,24 @@ namespace MDManageUI
         private void OnAudienceEntered(InteractWordMessage obj)
         {
             Player player = playerManager.RemoveGet((int)obj.UserId);
-            if (player != null)
+            if (player == null)
             {
+                player = new Player() { UID = obj.UserId, UName = obj.Username, LastOperationTime = DateTime.Now };
                 player.LastOperationTime = DateTime.Now;
+                SendJson(DanmuInterpreter.AudienceEnter(obj.Username));
             }
-            player = new Player() { UID = (int)obj.UserId, UName = obj.Username, LastOperationTime = DateTime.Now };
             playerManager.Add(player);
-            SendJson(DanmuInterpreter.AudienceEnter(obj.Username));
         }
         private void OnDanmuReceived(DanmuMessage obj)
         {
             Player player = playerManager.RemoveGet((int)obj.UserId);
             if (player == null)
             {
-                player = new Player() { UID = (int)obj.UserId, UName = obj.Username, LastOperationTime = DateTime.Now };
-                SendJson(DanmuInterpreter.Interpret(obj.Content, obj.Username));
+                player = new Player() { UID = obj.UserId, UName = obj.Username, LastOperationTime = DateTime.Now };
             }
-            //创建角色，转圈圈，向上下左右移动，换装
             player.LastOperationTime = DateTime.Now;
             playerManager.Add(player);
+            SendJson(DanmuInterpreter.Interpret(obj.Content, obj.Username));
         }
         private void btnOpenRoom_Click(object sender, RoutedEventArgs e)
         {
@@ -67,7 +66,10 @@ namespace MDManageUI
 
         private void btnMenuSend_Click(object sender, RoutedEventArgs e)
         {
-            liveHandler.DanmuMessageHandlerAsync(new DanmuMessage() { UserId = 0, Username = "", Content = txtMenuSend.Text });
+            if (liveHandler != null)
+            {
+                liveHandler.DanmuMessageHandlerAsync(new DanmuMessage() { UserId = 0, Username = "", Content = txtMenuSend.Text });
+            }
         }
     }
 }

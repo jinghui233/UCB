@@ -12,20 +12,20 @@ namespace MDManageUI.Models
     public class BiliUser
     {
         [Key]
-        public int UID { get; set; }
+        public long UID { get; set; }
         public string UName { get; set; }
     }
     public class BiliDanmu
     {
         [Key]
-        public int UID { get; set; }
+        public long UID { get; set; }
         public string UName { get; set; }
         public string Content { get; set; }
     }
     public class LiveRoomOrigLog
     {
         [Key]
-        public int ID { get; set; }
+        public long ID { get; set; }
         public string Message { get; set; }
         public DateTime Time { get; set; }
     }

@@ -19,12 +19,12 @@ namespace MDManageUI.Command
             BaseCommand baseCommand = null;
             danmu = danmu.Trim();
             if (danmu == "创建角色")
-                baseCommand= new NormAction() { UName = uName, ActionName = "AddCharacter" };
-            if (danmu == "转圈圈")
                 baseCommand = new NormAction() { UName = uName, ActionName = "AddCharacter" };
-            if (danmu == "换装")
+            else if (danmu == "转圈圈")
+                baseCommand = new NormAction() { UName = uName, ActionName = "MoveCircle" };
+            else if (danmu == "换装")
                 baseCommand = new NormAction() { UName = uName, ActionName = "ChangePendant" };
-            if (Regex.Matches(danmu, @"向\S+移动").Count > 0)
+            else if (Regex.Matches(danmu, @"向\S+移动").Count > 0)
             {
                 MoveSimple moveSimple = new MoveSimple();
                 moveSimple.Up = danmu.Contains("上");
@@ -33,11 +33,11 @@ namespace MDManageUI.Command
                 moveSimple.Right = danmu.Contains("右");
                 baseCommand = moveSimple;
             }
-            if (baseCommand!=null)
+            else
             {
-                return new TransferredData(baseCommand);
+                baseCommand = new BaseCommand() { UName = uName, OrigDanmu = danmu };
             }
-            return null;
+            return new TransferredData(baseCommand);
         }
     }
 }
