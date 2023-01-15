@@ -51,13 +51,21 @@ namespace MDManageUI
         private void OnDanmuReceived(DanmuMessage obj)
         {
             Player player = playerManager.RemoveGet((int)obj.UserId);
-            if (player == null)
+            if (player == null && obj.Content.Trim() == "创建角色" || obj.Content == "add")
             {
                 player = new Player() { UID = obj.UserId, UName = obj.Username, LastOperationTime = DateTime.Now };
+                Player removePlayer = playerManager.LimitCount();
+                if (removePlayer != null)
+                {
+                    SendJson(DanmuInterpreter.Interpret("删除角色", player.UName));
+                }
             }
-            player.LastOperationTime = DateTime.Now;
-            playerManager.Add(player);
-            SendJson(DanmuInterpreter.Interpret(obj.Content, obj.Username));
+            if (player != null)
+            {
+                player.LastOperationTime = DateTime.Now;
+                playerManager.Add(player);
+                SendJson(DanmuInterpreter.Interpret(obj.Content, obj.Username));
+            }
         }
         private void btnOpenRoom_Click(object sender, RoutedEventArgs e)
         {
@@ -68,7 +76,7 @@ namespace MDManageUI
         {
             if (liveHandler != null)
             {
-                liveHandler.DanmuMessageHandlerAsync(new DanmuMessage() { UserId = 0, Username = "", Content = txtMenuSend.Text });
+                liveHandler.DanmuMessageHandlerAsync(new DanmuMessage() { UserId = 0, Username = txtMenuSendUName.Text, Content = txtMenuSendDanmu.Text });
             }
         }
     }

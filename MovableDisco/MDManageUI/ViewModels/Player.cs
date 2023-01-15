@@ -47,6 +47,16 @@ namespace MDManageUI
             }
             return null;
         }
+        public Player LimitCount()
+        {
+            if (Players.Count > MaxPlayerNumber)
+            {
+                Player removedPlayer = PlayerList.First().Value;
+                Remove(removedPlayer);
+                return removedPlayer;
+            }
+            return null;
+        }
         public void Add(Player player)
         {
             if (!PlayerDictionary.ContainsKey(player.UID))
@@ -54,11 +64,6 @@ namespace MDManageUI
                 PlayerDictionary.Add(player.UID, player);
                 PlayerList.Add(player.LastOperationTime, player);
                 Players.Add(player);
-            }
-            if (Players.Count > MaxPlayerNumber)
-            {
-                Player removedPlayer = PlayerList.First().Value;
-                Remove(removedPlayer);
             }
         }
         public void Remove(Player player)

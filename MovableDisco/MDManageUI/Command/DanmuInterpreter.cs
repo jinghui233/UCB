@@ -16,10 +16,12 @@ namespace MDManageUI.Command
         //创建角色，转圈圈，向上下左右移动，换装
         public static TransferredData Interpret(string danmu, string uName)
         {
-            BaseCommand baseCommand = null;
             danmu = danmu.Trim();
-            if (danmu == "创建角色")
+            BaseCommand baseCommand;
+            if (danmu == "创建角色" || danmu == "add")
                 baseCommand = new NormAction() { UName = uName, ActionName = "AddCharacter" };
+            else if (danmu == "删除角色" || danmu == "del")
+                baseCommand = new NormAction() { UName = uName, ActionName = "RemoveCharacter" };
             else if (danmu == "转圈圈")
                 baseCommand = new NormAction() { UName = uName, ActionName = "MoveCircle" };
             else if (danmu == "换装")

@@ -24,7 +24,8 @@
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <DockPanel Grid.Column="0">
-                <TextBox DockPanel.Dock="Top" x:Name="txtMenuSend"/>
+                <TextBox DockPanel.Dock="Top" x:Name="txtMenuSendUName" Text="nema1"/>
+                <TextBox DockPanel.Dock="Top" x:Name="txtMenuSendDanmu" Text="add"/>
                 <Button DockPanel.Dock="Top" Content="SendDanmu" Click="btnMenuSend_Click"/>
                 <RichTextBox x:Name="rtxDanmu" DockPanel.Dock="Bottom"></RichTextBox>
             </DockPanel>
