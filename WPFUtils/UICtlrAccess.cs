@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -15,7 +17,7 @@ namespace WPFUtils.Extension
                 page.Dispatcher.Invoke(new Action(() =>
                 {
                     richTextBox.AppendText(txt);
-                    while (limitBlocks&& richTextBox.Document.Blocks.Count > maxBlocks)
+                    while (limitBlocks && richTextBox.Document.Blocks.Count > maxBlocks)
                     {
                         richTextBox.Document.Blocks.Remove(richTextBox.Document.Blocks.FirstBlock);
                     }

@@ -34,6 +34,7 @@ namespace MDManageUI
     {
         public string UName { get; set; }
         public string OrigDanmu { get; set; }
+        public bool ShowDanmu { get; set; }
         public string ToJson()
         {
             return JsonHelper.ToJson(this);
@@ -49,5 +50,9 @@ namespace MDManageUI
         public bool Right { get; set; }
         public bool Up { get; set; }
         public bool Down { get; set; }
+    }
+    public class ChangeSpeed : BaseCommand
+    {
+        public int dSpeed;
     }
 }

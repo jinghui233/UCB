@@ -24,6 +24,7 @@ namespace MDManageUI
         private void OnClientConnected(SocketServer arg1, SocketConnection arg2)
         {
             socketConnection = arg2;
+            UpdateAllPlayers();
         }
         private void OnDebugMsg(string obj)
         {
@@ -38,21 +39,21 @@ namespace MDManageUI
         {
             if (socketConnection == null)
             {
-                this.AppendText(rtxCommand, "SocketServer-信息未发送，无连接的Client");
+                this.AppendText(rtxCommand, "SocketServer-信息未发送，无连接的Client\n");
                 return;
             }
             socketConnection.Send(msg);
-            this.AppendText(rtxCommand, "SocketServer-信息发送成功");
+            this.AppendText(rtxCommand, "SocketServer-信息发送成功\n");
         }
         private void SendJson(object obj)
         {
             if (socketConnection == null)
             {
-                this.AppendText(rtxCommand, "SocketServer-数据未发送，无连接的Client");
+                this.AppendText(rtxCommand, "SocketServer-数据未发送，无连接的Client\n");
                 return;
             }
             socketConnection.SendAsJson(obj);
-            this.AppendText(rtxCommand, "SocketServer-数据发送成功");
+            this.AppendText(rtxCommand, "SocketServer-数据发送成功\n");
         }
     }
 }

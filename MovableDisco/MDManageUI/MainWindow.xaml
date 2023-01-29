@@ -9,13 +9,17 @@
     <DockPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <Label Content="RoomID:"/>
-            <TextBox x:Name="txtRoomID" Text="6092" Width="70"/>
-            <Button Content="OpenRoom" Click="btnOpenRoom_Click"/>
+            <TextBox x:Name="txtRoomID" Text="2207229" Width="70"/>
+            <Button Content="打开直播间" Click="btnOpenRoom_Click"/>
             <Label Content="IP:"/>
             <TextBox x:Name="txtIP" Text="127.0.0.1" Width="60"/>
             <Label Content="Port:"/>
             <TextBox x:Name="txtPort" Text="5000" Width="40"/>
             <Button Content="OpenServer" IsEnabled="False"/>
+            <Label Content="最大玩家数量"/>
+            <TextBox x:Name="txtMaxPlayerNum" Text="100" Width="30"/>
+            <Button Content="应用数量限制" Click="btnUseNumLimit_Click"/>
+            <Label x:Name="curPlayerNum"/>
         </StackPanel>
         <Grid DockPanel.Dock="Bottom">
             <Grid.ColumnDefinitions>
@@ -24,19 +28,33 @@
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <DockPanel Grid.Column="0">
-                <TextBox DockPanel.Dock="Top" x:Name="txtMenuSendUName" Text="nema1"/>
-                <TextBox DockPanel.Dock="Top" x:Name="txtMenuSendDanmu" Text="add"/>
-                <Button DockPanel.Dock="Top" Content="SendDanmu" Click="btnMenuSend_Click"/>
+                <TextBox DockPanel.Dock="Top" x:Name="txtMenuSendUName" Text="nema1" KeyDown="btnMenuSend_Click"/>
+                <TextBox DockPanel.Dock="Top" x:Name="txtMenuSendDanmu" Text="add" KeyDown="btnMenuSend_Click"/>
+                <Button DockPanel.Dock="Top" Content="添加新随机观众" Click="btnMenuAddNew_Click"/>
                 <RichTextBox x:Name="rtxDanmu" DockPanel.Dock="Bottom"></RichTextBox>
             </DockPanel>
-            <DataGrid Grid.Column="1" Name="dataGrid1" ItemsSource="{Binding}" AutoGenerateColumns="False" IsReadOnly="True">
-                <DataGrid.Columns>
-                    <DataGridComboBoxColumn></DataGridComboBoxColumn>
-                    <DataGridTextColumn Header="UID" Width="60" Binding="{Binding UID, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="UName" Width="60" Binding="{Binding UName, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
-                    <DataGridTextColumn Header="LastOperationTime" Width="80" Binding="{Binding LastOperationTime, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
-                </DataGrid.Columns>
-            </DataGrid>
+            <DockPanel Grid.Column="1">
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                    <CheckBox Content="加入即添加" x:Name="cbxEnterAdd"></CheckBox>
+                    <Button Content="删除角色" Click="btnNormText_Click"/>
+                    <Button Content="转圈圈" Click="btnNormText_Click"/>
+                    <Button Content="换装" Click="btnNormText_Click"/>
+                    <Button Content="甩头" Click="btnNormText_Click"/>
+                    <Button Content="向下移动" Click="btnMoveDown_Click"/>
+                    <Button Content="加速" Click="btnNormText_Click"/>
+                    <Button Content="减速" Click="btnNormText_Click"/>
+                    <Button Content="SwitchMusic" Click="btnDebugDanmu_Click"/>
+                    <Button Content="ClrAllPlyrs" Click="btnDebugDanmu_Click"/>
+                </StackPanel>
+                <DataGrid DockPanel.Dock="Bottom" Name="dataGrid1" ItemsSource="{Binding}" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridComboBoxColumn></DataGridComboBoxColumn>
+                        <DataGridTextColumn Header="UID" Width="60" Binding="{Binding UID, Mode=OneWay}"/>
+                        <DataGridTextColumn Header="UName" Width="60" Binding="{Binding UName, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                        <DataGridTextColumn Header="LastOperationTime" Width="80" Binding="{Binding LastOperationTime, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
             <RichTextBox x:Name="rtxCommand" Grid.Column="2"></RichTextBox>
         </Grid>
     </DockPanel>
